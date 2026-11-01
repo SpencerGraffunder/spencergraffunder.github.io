@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Spencer Graffunder — projects and experiments, including Tandora.">
+  <meta name="description" content="Spencer Graffunder — projects and experiments, including Tandora, plus iOS app downloads.">
   <title>Spencer Graffunder</title>
   <style>
     :root {
@@ -95,6 +95,42 @@
       </a>
     </section>
 
+    <section aria-labelledby="downloads-heading">
+      <h2 id="downloads-heading">iOS Apps</h2>
+      <div style="display:grid; gap:1rem;">
+        <div class="card" style="cursor:default;" data-repo="SpencerGraffunder/pianobar-ios">
+          <h3>pianobar-ios</h3>
+          <p>Last.fm piano-radio in your pocket &mdash; play, skip, ban and love
+             tracks from a button grid. SwiftUI client over the original pianobar C core.</p>
+          <p style="margin-top:.9rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
+            <a class="dl" style="background:var(--accent-soft); color:var(--accent); padding:.45rem 1rem; border-radius:8px; text-decoration:none; font-weight:600;"
+               href="https://github.com/SpencerGraffunder/pianobar-ios/releases/download/ios-latest/pianobar-ios.ipa">Download&nbsp;.ipa</a>
+            <a href="https://github.com/SpencerGraffunder/pianobar-ios">GitHub</a>
+            <span class="meta" style="color:var(--muted); font-size:.85rem;"></span>
+          </p>
+        </div>
+        <div class="card" style="cursor:default;" data-repo="SpencerGraffunder/key-decoder">
+          <h3>KeyDecoder</h3>
+          <p>Point the camera at a key on its reference card: perspective
+             correction and computer vision read the bitting code, so a copy
+             can be cut without the original.</p>
+          <p style="margin-top:.9rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
+            <a class="dl" style="background:var(--accent-soft); color:var(--accent); padding:.45rem 1rem; border-radius:8px; text-decoration:none; font-weight:600;"
+               href="https://github.com/SpencerGraffunder/key-decoder/releases/download/ios-latest/KeyDecoder.ipa">Download&nbsp;.ipa</a>
+            <a href="https://github.com/SpencerGraffunder/key-decoder">GitHub</a>
+            <span class="meta" style="color:var(--muted); font-size:.85rem;"></span>
+          </p>
+        </div>
+      </div>
+      <p style="color:var(--muted); font-size:.85rem; margin-top:1rem;">
+        Files are plain <code>.ipa</code> and refresh automatically from each
+        project&rsquo;s latest GitHub Release &mdash; re-sign with
+        <a href="https://sideloadly.io/">Sideloadly</a> or
+        <a href="https://sidestore.io/">AltStore</a> using your Apple ID to
+        install (free Apple IDs re-sign for 7&nbsp;days at a time).
+      </p>
+    </section>
+
     <section aria-labelledby="future-heading">
       <h2 id="future-heading">More Coming Soon</h2>
       <div class="placeholder">
@@ -108,5 +144,31 @@
     &copy; 2026 Spencer Graffunder &middot;
     <a href="https://github.com/SpencerGraffunder">github.com/SpencerGraffunder</a>
   </footer>
+
+  <script>
+    // Decorate the iOS cards from each repo's latest GitHub Release: exact
+    // asset link + version/size/date. The static links already point at the
+    // permanent rolling-release URLs, so downloads work with JS disabled too;
+    // JS only hides the button of a project that has no release yet.
+    document.querySelectorAll('[data-repo]').forEach(function (card) {
+      var btn = card.querySelector('.dl'), meta = card.querySelector('.meta');
+      fetch('https://api.github.com/repos/' + card.dataset.repo + '/releases/latest')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (rel) {
+          var ipa = (rel.assets || []).find(function (a) { return a.name.endsWith('.ipa'); });
+          if (!ipa) { throw new Error('no ipa'); }
+          btn.href = ipa.browser_download_url;
+          btn.textContent = 'Download ' + ipa.name;
+          var date = new Date(rel.published_at).toLocaleDateString(undefined,
+            { year: 'numeric', month: 'short', day: 'numeric' });
+          meta.textContent = rel.tag_name + ' \u00B7 ' +
+            (ipa.size / 1048576).toFixed(1) + ' MB \u00B7 ' + date;
+        })
+        .catch(function () {
+          btn.style.display = 'none';
+          meta.textContent = 'No release published yet.';
+        });
+    });
+  </script>
 </body>
 </html>
