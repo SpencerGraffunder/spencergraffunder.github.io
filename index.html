@@ -155,7 +155,9 @@
       fetch('https://api.github.com/repos/' + card.dataset.repo + '/releases/latest')
         .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
         .then(function (rel) {
-          var ipa = (rel.assets || []).find(function (a) { return a.name.endsWith('.ipa'); });
+          var ipas = (rel.assets || []).filter(function (a) { return a.name.endsWith('.ipa'); });
+          ipas.sort(function (a, b) { return b.id - a.id; });  // newest upload wins if stale names linger
+          var ipa = ipas[0];
           if (!ipa) { throw new Error('no ipa'); }
           btn.href = ipa.browser_download_url;
           btn.textContent = 'Download ' + ipa.name;
