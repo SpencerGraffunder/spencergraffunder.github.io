@@ -168,8 +168,14 @@
           if (!ipa) { throw new Error('no ipa'); }
           btn.href = ipa.browser_download_url;
           btn.textContent = 'Download ' + ipa.name;
-          var date = new Date(rel.published_at).toLocaleDateString(undefined,
-            { year: 'numeric', month: 'short', day: 'numeric' });
+          // Use the ASSET's date, not the release's: the rolling release is
+          // created once and only its asset is replaced, so published_at
+          // freezes at the first build (KeyDecoder showed Nov 1 forever)
+          // while a recreated release (pianobar) always reads "today" even for
+          // a no-op rebuild. ipa.updated_at tracks the .ipa actually served.
+          var date = new Date(ipa.updated_at || ipa.created_at || rel.published_at)
+            .toLocaleDateString(undefined,
+              { year: 'numeric', month: 'short', day: 'numeric' });
           meta.textContent = rel.tag_name + ' \u00B7 ' +
             (ipa.size / 1048576).toFixed(1) + ' MB \u00B7 ' + date;
         })
