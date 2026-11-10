@@ -111,7 +111,7 @@
              tracks from a button grid. SwiftUI client over the original pianobar C core.</p>
           <p style="margin-top:.9rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
             <a class="dl" style="background:var(--accent-soft); color:var(--accent); padding:.45rem 1rem; border-radius:8px; text-decoration:none; font-weight:600;"
-               href="https://github.com/SpencerGraffunder/pianobar-ios/releases/download/ios-latest/pianobar-ios.ipa">Download&nbsp;.ipa</a>
+               href="https://github.com/SpencerGraffunder/pianobar-ios/releases/latest">Download&nbsp;.ipa</a>
             <a href="https://github.com/SpencerGraffunder/pianobar-ios">GitHub</a>
             <span class="meta" style="color:var(--muted); font-size:.85rem;"></span>
           </p>
@@ -123,7 +123,7 @@
              can be cut without the original.</p>
           <p style="margin-top:.9rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
             <a class="dl" style="background:var(--accent-soft); color:var(--accent); padding:.45rem 1rem; border-radius:8px; text-decoration:none; font-weight:600;"
-               href="https://github.com/SpencerGraffunder/key-decoder/releases/download/ios-latest/KeyDecoder.ipa">Download&nbsp;.ipa</a>
+               href="https://github.com/SpencerGraffunder/key-decoder/releases/latest">Download&nbsp;.ipa</a>
             <a href="https://github.com/SpencerGraffunder/key-decoder">GitHub</a>
             <span class="meta" style="color:var(--muted); font-size:.85rem;"></span>
           </p>
@@ -136,7 +136,7 @@
              network (Tailscale or LAN).</p>
           <p style="margin-top:.9rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
             <a class="dl" style="background:var(--accent-soft); color:var(--accent); padding:.45rem 1rem; border-radius:8px; text-decoration:none; font-weight:600;"
-               href="https://github.com/SpencerGraffunder/ArtificialMemory/releases/download/ios-latest/ArtificialMemory.ipa">Download&nbsp;.ipa</a>
+               href="https://github.com/SpencerGraffunder/ArtificialMemory/releases/latest">Download&nbsp;.ipa</a>
             <a href="https://github.com/SpencerGraffunder/ArtificialMemory">GitHub</a>
             <span class="meta" style="color:var(--muted); font-size:.85rem;"></span>
           </p>
@@ -167,9 +167,10 @@
 
   <script>
     // Decorate the iOS cards from each repo's latest GitHub Release: exact
-    // asset link + version/size/date. The static links already point at the
-    // permanent rolling-release URLs, so downloads work with JS disabled too;
-    // JS only hides the button of a project that has no release yet.
+    // asset link + version/size/date. Assets are versioned per build, so the
+    // static fallback links point at each repo's permanent /releases/latest
+    // page (correct even with JS disabled); JS replaces them with the direct
+    // versioned .ipa URL and hides the button of a project with no release.
     document.querySelectorAll('[data-repo]').forEach(function (card) {
       var btn = card.querySelector('.dl'), meta = card.querySelector('.meta');
       fetch('https://api.github.com/repos/' + card.dataset.repo + '/releases/latest')
